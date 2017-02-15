@@ -11,7 +11,7 @@ def load_data():
         line = f.readline()
         if line:
             str_ = line.strip("\n")
-            list_ = str_.split("\t")
+            list_ = str_.split(",")
             data = []
             for e in list_:
                 data.append(string.atoi(e))
@@ -130,5 +130,5 @@ def decision(tree, sample):  # 根据决策树对输入的样本进行决策
 load_data()
 the_tree = build_decision_tree(dataSet)
 print the_tree
-the_sample = [1, 0, 1, 2]
+the_sample = [0, 1, 1, 0]
 print decision(the_tree, the_sample)
