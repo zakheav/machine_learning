@@ -120,7 +120,7 @@ class Layer:
 class Network:
     def __init__(self):
         self.network = []
-        self.network.append(Layer(1, 10, 4))
+        self.network.append(Layer(0, 10, 4))
         self.network.append(Layer(1, 5, 10))
         self.network.append(Layer(2, 1, 5))
         self.train_time = 1000
