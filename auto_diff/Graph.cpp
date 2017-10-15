@@ -32,11 +32,10 @@ float Graph::forward_propagation () {
 }
 void Graph::back_propagation () {
     vector<Node*> topo_result;
-    topological_sort (reverse_table, topo_result);
+    topological_sort (reverse_table, topo_result);// 获得转置图的拓扑排序结果
     topo_result[0] -> sum_grad = 1.0;
     vector<Node*>::iterator vec_it = topo_result.begin ();
-    while (vec_it != topo_result.end ()) {
-        cout << (*vec_it) -> op_name << endl;
+    while (vec_it != topo_result.end ()) {// 按照拓扑排序的结果顺序依次执行其中节点的grad_op()函数
         (*vec_it) -> grad_op ();
         ++vec_it;
     }
