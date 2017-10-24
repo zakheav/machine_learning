@@ -9,33 +9,26 @@ void Graph::add_node (string parent_name, Node* node) {
         (node -> parents).push_back(parent_node);
     }
 }
-float Graph::forward_propagation () {
+Tensor Graph::forward_propagation () {
     vector<Node*> topo_result;
     topological_sort (adj_table, topo_result);
     vector<Node*>::iterator vec_it = topo_result.begin ();
-    float result = 0.0;
+    Tensor* result;
     while (vec_it != topo_result.end ()) {
         string node_name = (*vec_it) -> op_name;
         if (reverse_table.find (node_name) != reverse_table.end()) {// parents nodes exist
-            vector<Node*> parents = reverse_table[node_name];
-            vector<Node*>::iterator parents_it = parents.begin ();
-            while (parents_it != parents.end ()) {// copy parents output to child's inputs
-                (*vec_it) -> inputs.push_back ((*parents_it) -> output);
-                ++parents_it;
-            }
             (*vec_it) -> op ();
         }
         result = (*vec_it) -> output;
         ++vec_it;
     }
-    return result;
+    return *result;
 }
 void Graph::back_propagation () {
     vector<Node*> topo_result;
-    topological_sort (reverse_table, topo_result);// 获得转置图的拓扑排序结果
-    topo_result[0] -> sum_grad = 1.0;
+    topological_sort (reverse_table, topo_result);
     vector<Node*>::iterator vec_it = topo_result.begin ();
-    while (vec_it != topo_result.end ()) {// 按照拓扑排序的结果顺序依次执行其中节点的grad_op()函数
+    while (vec_it != topo_result.end ()) {
         (*vec_it) -> grad_op ();
         ++vec_it;
     }
@@ -108,14 +101,6 @@ string Graph::to_string () {
 }
 Graph::~Graph () {
     // free node_map
-    cout << "free adj_table" << endl;
-    adj_table.clear();
-
-    // free reverse_table
-    cout << "free reverse_table" << endl;
-    reverse_table.clear();
-
-    // free node_map
     cout << "free node_map" << endl;
     unordered_map<string, Node*>::iterator node_map_it = node_map.begin();
     while (node_map_it != node_map.end()) {
@@ -123,5 +108,4 @@ Graph::~Graph () {
         node_map_it -> second = 0;
         ++node_map_it;
     }
-    node_map.clear();
 }

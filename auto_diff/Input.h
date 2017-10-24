@@ -4,6 +4,6 @@
 /*输入节点*/
 class Input: public Node {
     public:
-        Input (std::string name, float input);
+        Input (std::string name, Tensor* input);
 };
 #endif

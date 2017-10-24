@@ -4,6 +4,7 @@
 #include <vector>
 #include <queue>
 #include "Node.h"
+#include "Tensor.h"
 /*计算图*/
 class Graph {
     public:
@@ -14,7 +15,7 @@ class Graph {
         // 拓扑排序 
         void topological_sort (std::unordered_map<std::string, std::vector<Node*> > &adj_table, std::vector<Node*> &result);
         void build_reverse_graph ();// 构建转置图
-        float forward_propagation ();// 前向传播
+        Tensor forward_propagation ();// 前向传播
         void back_propagation ();// 反向传播
         std::string to_string ();
         ~Graph ();

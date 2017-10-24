@@ -1,14 +1,19 @@
 #include "Node.h"
 using namespace std;
 Node::Node () {
-    this -> output = 0.0;
+    output = 0;
+    sum_grad = 0;
 }
 Node::Node (string name) {
-    this -> sum_grad = 0.0;
-    this -> output = 0.0;
     this -> op_name = name;
+    output = 0;
+    sum_grad = 0;
 }
 void Node::op () {
 }
 void Node::grad_op () {
+}
+Node::~Node () {
+    delete output;
+    delete sum_grad;
 }
