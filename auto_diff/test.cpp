@@ -29,8 +29,8 @@ int main() {
     w -> display ();
 
     Graph graph = Graph ();
-    graph.add_node ("", new Input("input1", h));
-    graph.add_node ("", new Input("input2", w));
+    graph.add_node ("", new Input("input1", h, 0));
+    graph.add_node ("", new Input("input2", w, 1));
     //Node* mult = new Mult ("mult");
     //graph.add_node ("input1", mult);
     //graph.add_node ("input2", mult);
