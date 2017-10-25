@@ -1,23 +1,23 @@
 all: test
-test: Graph.o Node.o Input.o Mult.o Add.o Sigmoid.o Trace.o Tensor.o test.o
-	g++ Graph.o Node.o Input.o Mult.o Add.o Sigmoid.o Trace.o Tensor.o test.o -o test
-test.o: test.cpp Graph.o Node.o Input.o Mult.o Add.o Sigmoid.o Trace.o Tensor.o
-	g++ -c test.cpp
-Graph.o: Graph.cpp Node.o
-	g++ -c Graph.cpp
-Node.o: Node.cpp
-	g++ -c Node.cpp
-Mult.o: Mult.cpp Node.o
-	g++ -c Mult.cpp
-Add.o: Add.cpp Node.o
-	g++ -c Add.cpp
-Input.o: Input.cpp Node.o
-	g++ -c Input.cpp
-Sigmoid.o: Sigmoid.cpp Node.o
-	g++ -c Sigmoid.cpp
-Trace.o: Trace.cpp Node.o
-	g++ -c Trace.cpp
-Tensor.o: Tensor.cpp Node.o
-	g++ -c Tensor.cpp
+test: obj/Graph.o obj/Node.o obj/Input.o obj/Mult.o obj/Add.o obj/Sigmoid.o obj/Trace.o obj/Tensor.o obj/test.o
+	g++ obj/Graph.o obj/Node.o obj/Input.o obj/Mult.o obj/Add.o obj/Sigmoid.o obj/Trace.o obj/Tensor.o obj/test.o -o test
+obj/test.o: test.cpp obj/Graph.o obj/Node.o obj/Input.o obj/Mult.o obj/Add.o obj/Sigmoid.o obj/Trace.o obj/Tensor.o
+	g++ -c test.cpp -o obj/test.o
+obj/Graph.o: Graph.cpp obj/Node.o
+	g++ -c Graph.cpp -o obj/Graph.o
+obj/Node.o: node/Node.cpp
+	g++ -c node/Node.cpp -o obj/Node.o
+obj/Mult.o: node/Mult.cpp obj/Node.o
+	g++ -c node/Mult.cpp -o obj/Mult.o
+obj/Add.o: node/Add.cpp obj/Node.o
+	g++ -c node/Add.cpp -o obj/Add.o
+obj/Input.o: node/Input.cpp obj/Node.o
+	g++ -c node/Input.cpp -o obj/Input.o
+obj/Sigmoid.o: node/Sigmoid.cpp obj/Node.o
+	g++ -c node/Sigmoid.cpp -o obj/Sigmoid.o
+obj/Trace.o: node/Trace.cpp obj/Node.o
+	g++ -c node/Trace.cpp -o obj/Trace.o
+obj/Tensor.o: Tensor.cpp obj/Node.o
+	g++ -c Tensor.cpp -o obj/Tensor.o
 clean:
-	rm *o test
+	rm obj/*o test

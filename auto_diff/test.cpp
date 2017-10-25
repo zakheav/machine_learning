@@ -1,12 +1,12 @@
-#include "Graph.h"
 #include <iostream>
 #include <vector>
-#include "Input.h"
-#include "Mult.h"
-#include "Add.h"
-#include "Node.h"
-#include "Sigmoid.h"
-#include "Trace.h"
+#include "include/Graph.h"
+#include "include/node/Input.h"
+#include "include/node/Mult.h"
+#include "include/node/Add.h"
+#include "include/node/Node.h"
+#include "include/node/Sigmoid.h"
+#include "include/node/Trace.h"
 using namespace std;
 int main() {
     // 构建计算图

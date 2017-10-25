@@ -1,4 +1,4 @@
-#include "Sigmoid.h"
+#include "../include/node/Sigmoid.h"
 #include <cmath>
 using namespace std;
 Sigmoid::Sigmoid (string name):Node (name) {

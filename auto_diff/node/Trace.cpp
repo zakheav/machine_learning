@@ -1,4 +1,4 @@
-#include "Trace.h"
+#include "../include/node/Trace.h"
 #include <iostream>
 using namespace std;
 Trace::Trace (string name):Node (name) {

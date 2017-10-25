@@ -1,4 +1,4 @@
-#include "Node.h"
+#include "../include/node/Node.h"
 using namespace std;
 Node::Node () {
     output = 0;

@@ -2,7 +2,7 @@
 #define NODE_H_
 #include <string>
 #include <vector>
-#include "Tensor.h"
+#include "../Tensor.h"
 /*节点的基类*/
 class Node {
     public:
