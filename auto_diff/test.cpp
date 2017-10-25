@@ -46,4 +46,6 @@ int main() {
     // 输出对于每个input的导数
     graph.node_map["input1"] -> sum_grad -> display ();
     graph.node_map["input2"] -> sum_grad -> display ();
+    graph.node_map["input1"] -> output -> display ();
+    graph.node_map["input2"] -> output -> display ();
 }

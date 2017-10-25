@@ -32,6 +32,12 @@ void Graph::back_propagation () {
         (*vec_it) -> grad_op ();
         ++vec_it;
     }
+    // 更新权值
+    vec_it = topo_result.begin ();
+    while (vec_it != topo_result.end ()) {
+        (*vec_it) -> update ();
+        ++vec_it;
+    }
 }
 void Graph::build_reverse_graph () {
     unordered_map<string, vector<Node*> >::iterator adj_table_it = adj_table.begin();

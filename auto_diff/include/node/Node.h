@@ -10,8 +10,10 @@ class Node {
         std::vector<Node*> parents;// 输入节点
         Tensor* output;// 输出
         Tensor* sum_grad;
+        float a;// 学习率
         virtual void op ();// 该计算节点的运算函数
         virtual void grad_op ();// 该计算节点对于输入的导函数
+        virtual void update ();// 根据梯度更新
         Node ();
         Node (std::string name);
         ~Node ();
