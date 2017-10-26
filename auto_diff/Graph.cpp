@@ -41,7 +41,7 @@ void Graph::back_propagation () {
     // 释放内存
     vec_it = topo_result.begin ();
     while (vec_it != topo_result.end ()) {
-        if ((*vec_it) -> need_update == 0) {
+        if ((*vec_it) -> parents.size () != 0) {// 不是原始输入节点
             delete (*vec_it) -> output;
             (*vec_it) -> output = 0;
         }
