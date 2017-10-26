@@ -6,6 +6,7 @@ Node::Node () {
     sum_grad = 0;
     a = 0.1;
     need_update = 0;
+    end_node = 0;
 }
 Node::Node (string name) {
     this -> op_name = name;
@@ -13,6 +14,7 @@ Node::Node (string name) {
     sum_grad = 0;
     a = 0.1;
     need_update = 0;
+    end_node = 0;
 }
 void Node::op () {
 }

@@ -11,6 +11,7 @@ class Node {
         Tensor* output;// 输出
         Tensor* sum_grad;
         int need_update;
+        int end_node;
         float a;// 学习率
         virtual void op ();// 该计算节点的运算函数
         virtual void grad_op ();// 该计算节点对于输入的导函数

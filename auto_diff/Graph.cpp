@@ -15,11 +15,10 @@ Tensor Graph::forward_propagation () {
     vector<Node*>::iterator vec_it = topo_result.begin ();
     Tensor* result;
     while (vec_it != topo_result.end ()) {
-        string node_name = (*vec_it) -> op_name;
-        if (reverse_table.find (node_name) != reverse_table.end()) {// parents nodes exist
+        if ((*vec_it) -> end_node == 0) {
             (*vec_it) -> op ();
+            result = (*vec_it) -> output;
         }
-        result = (*vec_it) -> output;
         ++vec_it;
     }
     return *result;
