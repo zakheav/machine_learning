@@ -30,6 +30,15 @@ Tensor* Tensor::mult (Tensor* tensor) {
     }
     return result;
 }
+Tensor* Tensor::scalar_mult (float a) {
+    Tensor* result = new Tensor (this -> shape[0], this -> shape[1]);
+    for (int i = 0; i < this -> shape[0]; ++i) {
+        for (int j = 0; j < this -> shape[1]; ++j) {
+            result -> tensor[i][j] = this -> tensor[i][j] * a;
+        }
+    }
+    return result;
+}
 void Tensor::add (Tensor* tensor, Tensor* result) {
     for (int i = 0; i < this -> shape[0]; ++i) {
         for (int j = 0; j < this -> shape[1]; ++j) {

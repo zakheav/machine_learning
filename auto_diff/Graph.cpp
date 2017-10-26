@@ -38,6 +38,17 @@ void Graph::back_propagation () {
         (*vec_it) -> update ();
         ++vec_it;
     }
+    // 释放内存
+    vec_it = topo_result.begin ();
+    while (vec_it != topo_result.end ()) {
+        if ((*vec_it) -> need_update == 0) {
+            delete (*vec_it) -> output;
+            (*vec_it) -> output = 0;
+        }
+        delete (*vec_it) -> sum_grad;
+        (*vec_it) -> sum_grad = 0;
+        ++vec_it;
+    }
 }
 void Graph::build_reverse_graph () {
     unordered_map<string, vector<Node*> >::iterator adj_table_it = adj_table.begin();
