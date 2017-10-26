@@ -76,9 +76,10 @@ int main() {
   
     graph.build_reverse_graph ();// 构建计算图的转置图
     for (int i = 0; i < 100000; ++i) {
-        cout << "error: ";
-        graph.forward_propagation ().display ();// 输出前向传播结果
-        cout << endl;
+        Tensor result = graph.forward_propagation ();// 前向传播
+        if (i % 1000 == 0) {
+            cout << "error"; result.display (); cout << endl;// 输出前向传播结果
+        }
         graph.back_propagation ();// 进行反向传播
     }
     cout << "result: w" << endl;
