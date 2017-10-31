@@ -15,12 +15,12 @@ import java.util.Map;
  */
 public class Main {
     public static void analysis(List<Word> dict) {// 获取词向量的相似度矩阵
-        for(int i = 0; i < dict.size(); ++i) {
+        for (int i = 0; i < dict.size(); ++i) {
             System.out.println();
-            System.out.print(dict.get(i).word+" ");
-            for(int j = 0; j < dict.size(); ++j) {
+            System.out.print(dict.get(i).word + " ");
+            for (int j = 0; j < dict.size(); ++j) {
                 double cos = Vector.dotProduct(dict.get(i).vec, dict.get(j).vec) / (Vector.mold(dict.get(i).vec) * Vector.mold(dict.get(j).vec));
-                DecimalFormat df=new DecimalFormat("0.#####");
+                DecimalFormat df = new DecimalFormat("0.#####");
                 System.out.print(df.format(cos) + ", ");
             }
         }
@@ -47,7 +47,7 @@ public class Main {
         Train.train(huffumanTree, word_idx);// 训练
 
         // display
-        for(Word word : dict) {
+        for (Word word : dict) {
             System.out.println(word.toString());
         }
 

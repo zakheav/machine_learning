@@ -3,6 +3,7 @@ package word2vec;
 import util.*;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +34,7 @@ public class Train {
 
         while (sentence != null) {
             if (sentence.length < 1) continue;
-            double[] deltaX = new double[Constants.VEC_SIZE];
-            for (int i = 0; i < sentence.length; ++i) {
+            for (int i = 0; i < sentence.length; ++i) {// 句子中的每一个单词
                 int predictWordIdx = word_idx.get(sentence[i]);// 待预测的单词在huffuman树中的下标
                 double[] X = new double[Constants.VEC_SIZE];// 待预测单词的上下文词向量的叠加
                 for (int j = 0; j < sentence.length; ++j) {
@@ -46,6 +46,7 @@ public class Train {
                 // debug
                 System.out.println(sentence[i] + ": " + likehood(X, predictWordIdx, hTree));
 
+                double[] deltaX = new double[Constants.VEC_SIZE];
                 // out -> hidden 梯度上升
                 List<Integer> code = hTree.treeArr[predictWordIdx].code;
                 int nodeIdx = predictWordIdx;
@@ -57,15 +58,16 @@ public class Train {
 
                     // 更新待预测单词在huffuman树中路径上的每个非叶子节点的theta向量
                     hTree.treeArr[nodeIdx].theta = Vector.add(theta, Vector.scalarMulti(g, X));
-                    // 更新X向量
+
                     deltaX = Vector.add(deltaX, Vector.scalarMulti(g, theta));
                 }
 
+                // hidden -> input 梯度上升
+                for (int j = 0; j < sentence.length; ++j) {
+                    hTree.treeArr[word_idx.get(sentence[j])].vec = Vector.add(hTree.treeArr[word_idx.get(sentence[j])].vec, deltaX);
+                }
             }
-            // hidden -> input 梯度上升
-            for (int i = 0; i < sentence.length; ++i) {
-                hTree.treeArr[word_idx.get(sentence[i])].vec = Vector.add(deltaX, hTree.treeArr[word_idx.get(sentence[i])].vec);
-            }
+
             sentence = GenerateDict.getSentence();
         }
     }

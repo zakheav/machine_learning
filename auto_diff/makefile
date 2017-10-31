@@ -1,10 +1,12 @@
 all: test
-test: obj/Graph.o obj/Node.o obj/Input.o obj/Mult.o obj/ScalarMult.o obj/SquareSum.o obj/Add.o obj/Sigmoid.o obj/Trace.o obj/Tensor.o obj/test.o
-	g++ obj/Graph.o obj/Node.o obj/Input.o obj/Mult.o obj/ScalarMult.o obj/SquareSum.o obj/Add.o obj/Sigmoid.o obj/Trace.o obj/Tensor.o obj/test.o -o test
-obj/test.o: test.cpp obj/Graph.o obj/Node.o obj/Input.o obj/Mult.o obj/ScalarMult.o obj/SquareSum.o obj/Add.o obj/Sigmoid.o obj/Trace.o obj/Tensor.o
+test: obj/test.o obj/Calculator.o obj/Graph.o obj/Node.o obj/Input.o obj/Mult.o obj/ScalarMult.o obj/SquareSum.o obj/Add.o obj/Sigmoid.o obj/Trace.o obj/Tensor.o
+	g++ obj/test.o obj/Calculator.o obj/Graph.o obj/Node.o obj/Input.o obj/Mult.o obj/ScalarMult.o obj/SquareSum.o obj/Add.o obj/Sigmoid.o obj/Trace.o obj/Tensor.o -o test
+obj/test.o: test.cpp obj/Calculator.o
 	g++ -c test.cpp -o obj/test.o
 obj/Graph.o: Graph.cpp obj/Node.o
 	g++ -c Graph.cpp -o obj/Graph.o
+obj/Calculator.o: Calculator.cpp obj/Graph.o obj/Node.o obj/Input.o obj/Mult.o obj/ScalarMult.o obj/SquareSum.o obj/Add.o obj/Sigmoid.o obj/Trace.o obj/Tensor.o
+	g++ -c Calculator.cpp -o obj/Calculator.o
 obj/Node.o: node/Node.cpp
 	g++ -c node/Node.cpp -o obj/Node.o
 obj/Mult.o: node/Mult.cpp obj/Node.o
