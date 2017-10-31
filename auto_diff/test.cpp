@@ -10,9 +10,9 @@ int main() {
     x -> tensor[2][0] = 1; x -> tensor[2][1] = 0;
     x -> tensor[3][0] = 1; x -> tensor[3][1] = 1;
     
-    Tensor* w1 = new Tensor (2, 2);
+    Tensor* w1 = new Tensor (2, 4);
 
-    Tensor* w2 = new Tensor (2, 1);
+    Tensor* w2 = new Tensor (4, 1);
 
     Tensor* one = new Tensor (1, 1);
     one -> tensor[0][0] = -1.0;
@@ -40,7 +40,7 @@ int main() {
     Node* loss = cal.elements_square_sum (h);
   
     cal.graph.build_reverse_graph ();// 构建计算图的转置图
-    for (int i = 0; i < 100000; ++i) {
+    for (int i = 0; i < 10000; ++i) {
         Tensor result = cal.graph.forward_propagation ();// 前向传播
         if (i % 1000 == 0) {
             cout << "error"; result.display (); cout << endl;// 输出前向传播结果
