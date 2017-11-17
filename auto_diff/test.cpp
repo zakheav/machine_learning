@@ -40,6 +40,7 @@ int main() {
     Node* loss = cal.elements_square_sum (h);
   
     cal.graph.build_reverse_graph ();// 构建计算图的转置图
+
     for (int i = 0; i < 10000; ++i) {
         Tensor result = cal.graph.forward_propagation ();// 前向传播
         if (i % 1000 == 0) {
@@ -47,18 +48,17 @@ int main() {
         }
         cal.graph.back_propagation ();// 进行反向传播
     }
+
     cout << "result: w" << endl;
     input_w1 -> output -> display ();
     input_w2 -> output -> display ();
 
     // 验证结果
-    // 设置计算图中的一些节点隐藏
-    input_one -> end_node = 1;
-    input_y -> end_node = 1;
-    minus_y -> end_node = 1;
-    h -> end_node = 1;
-    loss -> end_node = 1;
-    
+    // 设置计算图中的一些节点隐藏, 从而进行结果验证
+    vector<Node*> output_list;
+    output_list.push_back (sigmoid2);    
+    cal.graph.build_subgraph (output_list);
+
     cout << "模型输出：" << endl;
     cal.graph.forward_propagation ().display ();// 验证结果   
 }

@@ -6,5 +6,5 @@ package util;
 public class Constants {
     public static int VEC_SIZE = 5;
     public static double ALPHA = 0.001;// 学习率
-    public static int TIME = 10000;
+    public static int TIME = 500000;
 }

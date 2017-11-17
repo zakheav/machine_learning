@@ -2,11 +2,40 @@
 #include "include/Graph.h"
 using namespace std;
 void Graph::add_node (string parent_name, Node* node) {
-    node_map.insert(make_pair(node -> op_name, node));
+    node_map.insert (make_pair(node -> op_name, node));
     if (parent_name != "") {
         adj_table[parent_name].push_back(node);
         Node* parent_node = node_map[parent_name];
         (node -> parents).push_back(parent_node);
+    }
+}
+void Graph::build_subgraph (std::vector<Node*> output_list) {
+    unordered_map<string, Node*>::iterator node_map_it = node_map.begin ();
+    while (node_map_it != node_map.end ()) {
+        node_map_it -> second -> end_node = 1;// 先把所有节点都认为是无效的
+        ++node_map_it;
+    }
+    // 构造子图
+    queue<Node*> q;
+    unordered_set<Node*> visit;
+    vector<Node*>::iterator output_it = output_list.begin ();
+    while (output_it != output_list.end ()) {
+        q.push (*output_it);
+        visit.insert (*output_it);
+        ++output_it;
+    }
+    while (!q.empty ()) {
+        Node* node = q.front ();
+        q.pop ();
+        node -> end_node = 0;
+        vector<Node*>::iterator parents_it = node -> parents.begin ();
+        while (parents_it != node -> parents.end ()) {
+            if (visit.find (*parents_it) == visit.end ()) {// 没有访问过这个节点
+                visit.insert (*parents_it);
+                q.push (*parents_it);
+            }
+            ++parents_it;
+        }
     }
 }
 Tensor Graph::forward_propagation () {

@@ -9,8 +9,10 @@ import java.util.Map;
  * Created by yuanxi.wy on 2017/8/25.
  */
 public class GenerateDict {
-    private static String[] test = {"a,b,c,x,y,z","a,h,c,x,z","l,m,n"};
+    private static String[] test = {"1,2,3", "1,2,4","5,6,7"};
     private static int counter = -1;
+
+
 
     public static String[] getSentence() {
         ++counter;
