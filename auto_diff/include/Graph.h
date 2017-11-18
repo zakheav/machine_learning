@@ -19,6 +19,7 @@ class Graph {
         void build_reverse_graph ();// 构建转置图
         Tensor forward_propagation ();// 前向传播
         void back_propagation ();// 反向传播
+        void release_tensor ();// 释放无用的tensor
         std::string to_string ();
         ~Graph ();
 };

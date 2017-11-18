@@ -44,10 +44,8 @@ Tensor Graph::forward_propagation () {
     vector<Node*>::iterator vec_it = topo_result.begin ();
     Tensor* result;
     while (vec_it != topo_result.end ()) {
-        if ((*vec_it) -> end_node == 0) {
-            (*vec_it) -> op ();
-            result = (*vec_it) -> output;
-        }
+        (*vec_it) -> op ();
+        result = (*vec_it) -> output;
         ++vec_it;
     }
     return *result;
@@ -66,16 +64,17 @@ void Graph::back_propagation () {
         (*vec_it) -> update ();
         ++vec_it;
     }
-    // 释放内存
-    vec_it = topo_result.begin ();
-    while (vec_it != topo_result.end ()) {
-        if ((*vec_it) -> parents.size () != 0) {// 不是原始输入节点
-            delete (*vec_it) -> output;
-            (*vec_it) -> output = 0;
+}
+void Graph::release_tensor () {
+    unordered_map<string, Node*>::iterator node_map_it = node_map.begin ();
+    while (node_map_it != node_map.end ()) {
+        if (node_map_it -> second -> parents.size () != 0) {// 不是数据输入节点
+            delete (node_map_it -> second -> output);
+            node_map_it -> second -> output = 0;
         }
-        delete (*vec_it) -> sum_grad;
-        (*vec_it) -> sum_grad = 0;
-        ++vec_it;
+        delete (node_map_it -> second -> sum_grad);
+        node_map_it -> second -> sum_grad = 0;
+        ++node_map_it;
     }
 }
 void Graph::build_reverse_graph () {
@@ -118,7 +117,9 @@ void Graph::topological_sort (unordered_map<string, vector<Node*> > &adj_table, 
     while (!q.empty()) {
         Node* node = q.front();
         q.pop();
-        result.push_back(node);
+        if (node -> end_node == 0) {// 只把子图中的node输出到结果列表中
+            result.push_back (node);
+        }
         vector<Node*>::iterator vec_it = adj_table[node -> op_name].begin();
         while (vec_it != adj_table[node -> op_name].end()) {
             --indegree[(*vec_it) -> op_name];

@@ -47,6 +47,7 @@ int main() {
             cout << "error"; result.display (); cout << endl;// 输出前向传播结果
         }
         cal.graph.back_propagation ();// 进行反向传播
+        cal.graph.release_tensor ();// 清除不用的tensor
     }
 
     cout << "result: w" << endl;
