@@ -24,6 +24,17 @@ x_data = tf.cast(tf.stack(tf.decode_csv(x_record, record_defaults=x_record_defau
 w_data = tf.cast(tf.stack(tf.decode_csv(w_record, record_defaults=w_record_defaults)), tf.float32)
 x_data, w_data = tf.train.batch([x_data, w_data], batch_size=batch, capacity=100+3*batch)  # [batch, 16]
 
+def gat(inputs, dim, feature_trans, self_weight):
+  inputs = tf.reshape(inputs, [-1, 16, 1])
+  tile_inputs = tf.tile(inputs, [1, 1, dim])  # [batch, 16, dim]
+  trans_inputs = tile_inputs * tf.reshape(feature_trans, [1, 16, dim])  # [batch, 16, dim]
+  att_weight = tf.nn.softmax(tf.matmul(trans_inputs, tf.transpose(trans_inputs, [0, 2, 1])))  # [batch, 16, 16]
+
+  att_output = tf.matmul(att_weight, trans_inputs) + tf.reshape(self_weight, [1, 16, dim]) * trans_inputs  # [batch, 16, dim]
+  att_fc = tf.Variable(tf.random_normal([dim, 1], -0.1, 0.1), name='att_fc')  # [dim, 1]
+  output = tf.reshape(tf.matmul(tf.reshape(att_output, [-1, dim]), att_fc), [-1, 16])  # [batch, 16]
+  return output
+
 def fc(inputs, shape, w=None, b=None, mode='train'):
   if w == None and b == None:
     w = tf.Variable(tf.random_normal(shape, -0.1 / shape[0], 0.1 / shape[0]), name='fc_w')
@@ -47,6 +58,8 @@ with tf.Session() as sess:
   saver = tf.train.import_meta_graph('./checkpoint_d'+data_set+'/w-499.meta')
   saver.restore(sess, './checkpoint_d'+data_set+'/w-499')
   graph = tf.get_default_graph()
+  fea_trans = graph.get_tensor_by_name('fea_trans:0')
+  self_weight = graph.get_tensor_by_name('self_weight:0')
   fc_w0 = graph.get_tensor_by_name('fc_w:0')
   fc_b0 = graph.get_tensor_by_name('fc_b:0')
   fc_w1 = graph.get_tensor_by_name('fc_w_1:0')
@@ -66,6 +79,7 @@ with tf.Session() as sess:
   x_expand_data = tf.concat([x_data, expand_data], 0)
 
   # 只拟合扩展数据
+  expand_data = gat(expand_data, fea_trans, self_weight)
   h1 = fc(expand_data, [16, 256], fc_w0, fc_b0, 'test')
   h2 = fc(h1, [256, 256], fc_w1, fc_b1, 'test')
   h3 = fc(h2, [256, 256], fc_w2, fc_b2, 'test')
@@ -77,6 +91,7 @@ with tf.Session() as sess:
   w_expand_data = tf.concat([w_data, t_result_w], 0)
 
   # student model
+  x_expand_data = gat(x_expand_data, fea_trans, self_weight)
   s_h1 = fc(x_expand_data, [16, 256], None, None, 'test')
   s_h2 = fc(s_h1, [256, 256], None, None, 'test')
   s_h3 = fc(s_h2, [256, 128], None, None, 'test')
