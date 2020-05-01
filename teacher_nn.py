@@ -39,6 +39,19 @@ d_data = tf.cast(tf.stack(tf.decode_csv(d_record, record_defaults=d_record_defau
 w_data = tf.cast(tf.stack(tf.decode_csv(w_record, record_defaults=w_record_defaults)), tf.float32)
 x_data, w_data, d_data = tf.train.batch([x_data, w_data, d_data], batch_size=batch, capacity=100+3*batch)  # [batch, 16] [batch, 16] [batch, 1]
 
+def gat(inputs, dim):
+  inputs = tf.reshape(inputs, [-1, 16, 1])
+  tile_inputs = tf.tile(inputs, [1, 1, dim])  # [batch, 16, dim]
+  feature_trans = tf.Variable(tf.random_normal([16, dim], -0.1, 0.1), name='fea_trans')  # [16, dim]
+  trans_inputs = tile_inputs * tf.reshape(feature_trans, [1, 16, dim])  # [batch, 16, dim]
+  att_weight = tf.nn.softmax(tf.matmul(trans_inputs, tf.transpose(trans_inputs, [0, 2, 1])))  # [batch, 16, 16]
+
+  self_weight = tf.Variable(tf.random_normal([16, dim], -0.1, 0.1), name='self_weight')  # [16, dim]
+  att_output = tf.matmul(att_weight, trans_inputs) + tf.reshape(self_weight, [1, 16, dim]) * trans_inputs  # [batch, 16, dim]
+  att_fc = tf.Variable(tf.random_normal([dim, 1], -0.1, 0.1), name='att_fc')  # [dim, 1]
+  output = tf.reshape(tf.matmul(tf.reshape(att_output, [-1, dim]), att_fc), [-1, 16])
+  return output
+
 def fc(inputs, shape, mode):
   w = tf.Variable(tf.random_normal(shape, -0.1 / shape[0], 0.1 / shape[0]), name='fc_w')
   b = tf.Variable(tf.random_normal([shape[1]], -1, 1), name='fc_b')
@@ -52,7 +65,8 @@ def linear(inputs, shape):
   w = tf.Variable(tf.random_normal(shape, -0.1 / shape[0], 0.1 / shape[0]), name='linear_w')
   return tf.matmul(inputs, w, name='result_w'), w
 
-h1 = fc(x_data, [16, 256], mode)
+att_x_data = gat(x_data, 8)
+h1 = fc(att_x_data, [16, 256], mode)
 h2 = fc(h1, [256, 256], mode)
 h3 = fc(h2, [256, 256], mode)
 h4 = fc(h3, [256, 128], mode)
